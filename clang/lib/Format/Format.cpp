@@ -701,6 +701,8 @@ template <> struct MappingTraits<FormatStyle::SpaceBeforeParensCustom> {
                    Spacing.AfterRequiresInExpression);
     IO.mapOptional("BeforeNonEmptyParentheses",
                    Spacing.BeforeNonEmptyParentheses);
+    IO.mapOptional("BeforeEmptyParentheses",
+                   Spacing.BeforeEmptyParentheses);
   }
 };
 
@@ -714,6 +716,8 @@ struct ScalarEnumerationTraits<FormatStyle::SpaceBeforeParensStyle> {
                 FormatStyle::SBPO_ControlStatementsExceptControlMacros);
     IO.enumCase(Value, "NonEmptyParentheses",
                 FormatStyle::SBPO_NonEmptyParentheses);
+    IO.enumCase(Value, "EmptyParentheses",
+                FormatStyle::SBPO_EmptyParentheses);
     IO.enumCase(Value, "Always", FormatStyle::SBPO_Always);
     IO.enumCase(Value, "Custom", FormatStyle::SBPO_Custom);
 
@@ -1404,6 +1408,9 @@ static void expandPresetsSpaceBeforeParens(FormatStyle &Expanded) {
     break;
   case FormatStyle::SBPO_NonEmptyParentheses:
     Expanded.SpaceBeforeParensOptions.BeforeNonEmptyParentheses = true;
+    break;
+  case FormatStyle::SBPO_EmptyParentheses:
+    Expanded.SpaceBeforeParensOptions.BeforeEmptyParentheses = true;
     break;
   case FormatStyle::SBPO_Always:
     break;

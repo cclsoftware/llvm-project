@@ -5320,10 +5320,23 @@ the configuration (without a prefix: ``Auto``).
 
     .. code-block:: c++
 
-      void() {
-        if (true) {
+      void f() {
+        if(true) {
           f();
           g (x, y, z);
+        }
+      }
+      
+  * ``SBPO_EmptyParentheses`` (in configuration: ``EmptyParentheses``)
+    Put a space before opening parentheses only if the parentheses are empty
+    i.e. '()'
+
+    .. code-block:: c++
+
+      void f () {
+        if (true) {
+          f ();
+          g(x, y, z);
         }
       }
 
@@ -5479,8 +5492,17 @@ the configuration (without a prefix: ``Auto``).
     .. code-block:: c++
 
        true:                                  false:
-       void f (int a);                 vs.    void f();
-       f (a);                                 f();
+       void f (int a);                 vs.    void f(int a);
+       f (a);                                 f(a);
+
+  * ``bool BeforeEmptyParentheses`` If ``true``, put a space before opening parentheses only if the
+    parentheses are empty.
+
+    .. code-block:: c++
+
+       true:                                  false:
+       void f ();                      vs.    void f();
+       f ();                                  f();
 
 
 .. _SpaceBeforeRangeBasedForLoopColon:

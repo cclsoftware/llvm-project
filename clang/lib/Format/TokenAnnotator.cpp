@@ -3940,6 +3940,10 @@ bool TokenAnnotator::spaceRequiredBeforeParens(const FormatToken &Right) const {
       Right.ParameterCount > 0) {
     return true;
   }
+  if (Style.SpaceBeforeParensOptions.BeforeEmptyParentheses &&
+      Right.ParameterCount == 0) {
+    return true;
+  }
   return false;
 }
 
@@ -4289,8 +4293,7 @@ bool TokenAnnotator::spaceRequiredBetween(const AnnotatedLine &Line,
                      tok::kw_case, TT_ForEachMacro, TT_ObjCForIn) ||
         Left.isIf(Line.Type != LT_PreprocessorDirective) ||
         Right.is(TT_ConditionLParen)) {
-      return Style.SpaceBeforeParensOptions.AfterControlStatements ||
-             spaceRequiredBeforeParens(Right);
+      return Style.SpaceBeforeParensOptions.AfterControlStatements;
     }
 
     // TODO add Operator overloading specific Options to

@@ -4200,6 +4200,17 @@ struct FormatStyle {
     ///   }
     /// \endcode
     SBPO_NonEmptyParentheses,
+    /// Put a space before opening parentheses only if the parentheses are
+    /// empty i.e. '()'
+    /// \code
+    ///   void () {
+    ///     if(true) {
+    ///       f ();
+    ///       g(x, y, z);
+    ///     }
+    ///   }
+    /// \endcode
+    SBPO_EmptyParentheses,
     /// Always put a space before opening parentheses, except when it's
     /// prohibited by the syntax rules (in function-like macro definitions) or
     /// when determined by other style rules (after unary operators, opening
@@ -4318,10 +4329,18 @@ struct FormatStyle {
     /// parentheses are not empty.
     /// \code
     ///    true:                                  false:
-    ///    void f (int a);                 vs.    void f();
-    ///    f (a);                                 f();
+    ///    void f (int a);                 vs.    void f(int a);
+    ///    f (a);                                 f(a);
     /// \endcode
     bool BeforeNonEmptyParentheses;
+    /// If ``true``, put a space before opening parentheses only if the
+    /// parentheses are not empty.
+    /// \code
+    ///    true:                                  false:
+    ///    void f ();                      vs.    void f();
+    ///    f ();                                  f();
+    /// \endcode
+    bool BeforeEmptyParentheses;
 
     SpaceBeforeParensCustom()
         : AfterControlStatements(false), AfterForeachMacros(false),
@@ -4329,7 +4348,7 @@ struct FormatStyle {
           AfterFunctionDefinitionName(false), AfterIfMacros(false),
           AfterOverloadedOperator(false), AfterPlacementOperator(APO_Leave),
           AfterRequiresInClause(false), AfterRequiresInExpression(false),
-          BeforeNonEmptyParentheses(false) {}
+          BeforeNonEmptyParentheses(false), BeforeEmptyParentheses(false) {}
 
     bool operator==(const SpaceBeforeParensCustom &Other) const {
       return AfterControlStatements == Other.AfterControlStatements &&
@@ -4342,7 +4361,8 @@ struct FormatStyle {
              AfterPlacementOperator == Other.AfterPlacementOperator &&
              AfterRequiresInClause == Other.AfterRequiresInClause &&
              AfterRequiresInExpression == Other.AfterRequiresInExpression &&
-             BeforeNonEmptyParentheses == Other.BeforeNonEmptyParentheses;
+             BeforeNonEmptyParentheses == Other.BeforeNonEmptyParentheses &&
+             BeforeEmptyParentheses == Other.BeforeEmptyParentheses;
     }
   };
 
