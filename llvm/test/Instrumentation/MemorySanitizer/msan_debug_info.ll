@@ -542,7 +542,7 @@ define void @VAStart(i32 %x, ...) sanitize_memory {
 ; CHECK-NEXT:    [[TMP29:%.*]] = add i64 [[TMP27]], 17592186044416, !dbg [[DBG11]]
 ; CHECK-NEXT:    [[TMP30:%.*]] = inttoptr i64 [[TMP29]] to ptr, !dbg [[DBG11]]
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP28]], i8 0, i64 24, i1 false), !dbg [[DBG11]]
-; CHECK-NEXT:    call void @llvm.va_start(ptr [[VA]]), !dbg [[DBG11]]
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr [[VA]]), !dbg [[DBG11]]
 ; CHECK-NEXT:    [[TMP31:%.*]] = ptrtoint ptr [[VA]] to i64, !dbg [[DBG11]]
 ; CHECK-NEXT:    [[TMP32:%.*]] = add i64 [[TMP31]], 16, !dbg [[DBG11]]
 ; CHECK-NEXT:    [[TMP33:%.*]] = inttoptr i64 [[TMP32]] to ptr, !dbg [[DBG11]]
@@ -664,8 +664,8 @@ entry:
 
 declare i32 @NoSanitizeMemoryUndefHelper(i32 %x)
 
-declare void @llvm.lifetime.start.p0(i64 immarg %0, ptr nocapture %1)
-declare void @llvm.lifetime.end.p0(i64 immarg %0, ptr nocapture %1)
+declare void @llvm.lifetime.start.p0(ptr nocapture %1)
+declare void @llvm.lifetime.end.p0(ptr nocapture %1)
 declare void @foo8(ptr nocapture)
 
 
@@ -674,7 +674,7 @@ define void @msan() sanitize_memory {
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    call void @llvm.donothing(), !dbg [[DBG1]]
 ; CHECK-NEXT:    [[TEXT:%.*]] = alloca i8, align 1, !dbg [[DBG1]]
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 1, ptr [[TEXT]]), !dbg [[DBG7]]
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr [[TEXT]]), !dbg [[DBG7]]
 ; CHECK-NEXT:    [[TMP0:%.*]] = ptrtoint ptr [[TEXT]] to i64, !dbg [[DBG7]]
 ; CHECK-NEXT:    [[TMP1:%.*]] = xor i64 [[TMP0]], 87960930222080, !dbg [[DBG7]]
 ; CHECK-NEXT:    [[TMP2:%.*]] = inttoptr i64 [[TMP1]] to ptr, !dbg [[DBG7]]
@@ -685,13 +685,13 @@ define void @msan() sanitize_memory {
 ; CHECK-NEXT:    call void @__msan_set_alloca_origin_with_descr(ptr [[TEXT]], i64 1, ptr @[[GLOB6:[0-9]+]], ptr @[[GLOB7:[0-9]+]]), !dbg [[DBG7]]
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8, !dbg [[DBG8]]
 ; CHECK-NEXT:    call void @foo8(ptr [[TEXT]]), !dbg [[DBG8]]
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 1, ptr [[TEXT]]), !dbg
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr [[TEXT]]), !dbg
 ; CHECK-NEXT:    ret void, !dbg
 ;
 entry:
   %text = alloca i8, align 1, !dbg !10
-  call void @llvm.lifetime.start.p0(i64 1, ptr %text), !dbg !11
+  call void @llvm.lifetime.start.p0(ptr %text), !dbg !11
   call void @foo8(ptr %text), !dbg !12
-  call void @llvm.lifetime.end.p0(i64 1, ptr %text), !dbg !13
+  call void @llvm.lifetime.end.p0(ptr %text), !dbg !13
   ret void, !dbg !14
 }

@@ -749,7 +749,7 @@ define linkonce_odr dso_local void @_Z5test2IcEvT_iz(i8 noundef %t, i32 noundef 
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -758,7 +758,7 @@ define linkonce_odr dso_local void @_Z5test2IcEvT_iz(i8 noundef %t, i32 noundef 
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -808,27 +808,27 @@ define linkonce_odr dso_local void @_Z5test2IcEvT_iz(i8 noundef %t, i32 noundef 
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr nocapture) #3
+declare void @llvm.lifetime.start.p0(ptr nocapture) #3
 
 declare void @llvm.va_start(ptr) #4
 
 declare void @llvm.va_end(ptr) #4
 
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr nocapture) #3
+declare void @llvm.lifetime.end.p0(ptr nocapture) #3
 
 define linkonce_odr dso_local void @_Z5test2IiEvT_iz(i32 noundef %t, i32 noundef %n, ...) sanitize_memory {
 ; CHECK-LABEL: define linkonce_odr dso_local void @_Z5test2IiEvT_iz(
@@ -842,7 +842,7 @@ define linkonce_odr dso_local void @_Z5test2IiEvT_iz(i32 noundef %t, i32 noundef
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -851,7 +851,7 @@ define linkonce_odr dso_local void @_Z5test2IiEvT_iz(i32 noundef %t, i32 noundef
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -901,17 +901,17 @@ define linkonce_odr dso_local void @_Z5test2IiEvT_iz(i32 noundef %t, i32 noundef
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -927,7 +927,7 @@ define linkonce_odr dso_local void @_Z5test2IfEvT_iz(float noundef %t, i32 nound
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -936,7 +936,7 @@ define linkonce_odr dso_local void @_Z5test2IfEvT_iz(float noundef %t, i32 nound
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -986,17 +986,17 @@ define linkonce_odr dso_local void @_Z5test2IfEvT_iz(float noundef %t, i32 nound
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1012,7 +1012,7 @@ define linkonce_odr dso_local void @_Z5test2IdEvT_iz(double noundef %t, i32 noun
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1021,7 +1021,7 @@ define linkonce_odr dso_local void @_Z5test2IdEvT_iz(double noundef %t, i32 noun
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1071,17 +1071,17 @@ define linkonce_odr dso_local void @_Z5test2IdEvT_iz(double noundef %t, i32 noun
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1097,7 +1097,7 @@ define linkonce_odr dso_local void @_Z5test2IeEvT_iz(fp128 noundef %t, i32 nound
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1106,7 +1106,7 @@ define linkonce_odr dso_local void @_Z5test2IeEvT_iz(fp128 noundef %t, i32 nound
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1156,17 +1156,17 @@ define linkonce_odr dso_local void @_Z5test2IeEvT_iz(fp128 noundef %t, i32 nound
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1182,7 +1182,7 @@ define linkonce_odr dso_local void @_Z5test2I6IntIntEvT_iz(i64 %t.coerce, i32 no
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1191,7 +1191,7 @@ define linkonce_odr dso_local void @_Z5test2I6IntIntEvT_iz(i64 %t.coerce, i32 no
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1241,17 +1241,17 @@ define linkonce_odr dso_local void @_Z5test2I6IntIntEvT_iz(i64 %t.coerce, i32 no
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1267,7 +1267,7 @@ define linkonce_odr dso_local void @_Z5test2I10Int64Int64EvT_iz([2 x i64] %t.coe
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1276,7 +1276,7 @@ define linkonce_odr dso_local void @_Z5test2I10Int64Int64EvT_iz([2 x i64] %t.coe
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1326,17 +1326,17 @@ define linkonce_odr dso_local void @_Z5test2I10Int64Int64EvT_iz([2 x i64] %t.coe
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1352,7 +1352,7 @@ define linkonce_odr dso_local void @_Z5test2I12DoubleDoubleEvT_iz([2 x double] a
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1361,7 +1361,7 @@ define linkonce_odr dso_local void @_Z5test2I12DoubleDoubleEvT_iz([2 x double] a
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1411,17 +1411,17 @@ define linkonce_odr dso_local void @_Z5test2I12DoubleDoubleEvT_iz([2 x double] a
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1437,7 +1437,7 @@ define linkonce_odr dso_local void @_Z5test2I7Double4EvT_iz([4 x double] alignst
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1446,7 +1446,7 @@ define linkonce_odr dso_local void @_Z5test2I7Double4EvT_iz([4 x double] alignst
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1496,17 +1496,17 @@ define linkonce_odr dso_local void @_Z5test2I7Double4EvT_iz([4 x double] alignst
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1522,7 +1522,7 @@ define linkonce_odr dso_local void @_Z5test2I11DoubleFloatEvT_iz([2 x i64] %t.co
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1531,7 +1531,7 @@ define linkonce_odr dso_local void @_Z5test2I11DoubleFloatEvT_iz([2 x i64] %t.co
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1581,17 +1581,17 @@ define linkonce_odr dso_local void @_Z5test2I11DoubleFloatEvT_iz([2 x i64] %t.co
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1607,7 +1607,7 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble2EvT_iz([2 x fp128] ali
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1616,7 +1616,7 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble2EvT_iz([2 x fp128] ali
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1666,17 +1666,17 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble2EvT_iz([2 x fp128] ali
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 
@@ -1692,7 +1692,7 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble4EvT_iz([4 x fp128] ali
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 8 [[TMP2]], ptr align 8 @__msan_va_arg_tls, i64 [[TMP3]], i1 false)
 ; CHECK-NEXT:    call void @llvm.donothing()
 ; CHECK-NEXT:    [[ARGS:%.*]] = alloca %"struct.std::__va_list", align 8
-; CHECK-NEXT:    call void @llvm.lifetime.start.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP4:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP5:%.*]] = xor i64 [[TMP4]], 193514046488576
 ; CHECK-NEXT:    [[TMP6:%.*]] = inttoptr i64 [[TMP5]] to ptr
@@ -1701,7 +1701,7 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble4EvT_iz([4 x fp128] ali
 ; CHECK-NEXT:    [[TMP8:%.*]] = xor i64 [[TMP7]], 193514046488576
 ; CHECK-NEXT:    [[TMP9:%.*]] = inttoptr i64 [[TMP8]] to ptr
 ; CHECK-NEXT:    call void @llvm.memset.p0.i64(ptr align 8 [[TMP9]], i8 0, i64 32, i1 false)
-; CHECK-NEXT:    call void @llvm.va_start(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_start.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    [[TMP10:%.*]] = ptrtoint ptr [[ARGS]] to i64
 ; CHECK-NEXT:    [[TMP11:%.*]] = add i64 [[TMP10]], 0
 ; CHECK-NEXT:    [[TMP12:%.*]] = inttoptr i64 [[TMP11]] to ptr
@@ -1751,17 +1751,17 @@ define linkonce_odr dso_local void @_Z5test2I11LongDouble4EvT_iz([4 x fp128] ali
 ; CHECK-NEXT:    call void @llvm.memcpy.p0.p0.i64(ptr align 16 [[TMP52]], ptr align 16 [[TMP53]], i64 [[TMP0]], i1 false)
 ; CHECK-NEXT:    store i64 0, ptr @__msan_param_tls, align 8
 ; CHECK-NEXT:    call void @_Z3usePv(ptr noundef nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.va_end(ptr nonnull [[ARGS]])
-; CHECK-NEXT:    call void @llvm.lifetime.end.p0(i64 32, ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.va_end.p0(ptr nonnull [[ARGS]])
+; CHECK-NEXT:    call void @llvm.lifetime.end.p0(ptr nonnull [[ARGS]])
 ; CHECK-NEXT:    ret void
 ;
 entry:
   %args = alloca %"struct.std::__va_list", align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.start.p0(ptr nonnull %args) #5
   call void @llvm.va_start(ptr nonnull %args)
   call void @_Z3usePv(ptr noundef nonnull %args)
   call void @llvm.va_end(ptr nonnull %args)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %args) #5
+  call void @llvm.lifetime.end.p0(ptr nonnull %args) #5
   ret void
 }
 

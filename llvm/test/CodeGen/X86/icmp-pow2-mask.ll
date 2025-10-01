@@ -56,7 +56,7 @@ define <16 x i16> @pow2_mask_v16i16(i16 zeroext %0) {
 ; SSE:       # %bb.0:
 ; SSE-NEXT:    movd %edi, %xmm0
 ; SSE-NEXT:    pshuflw {{.*#+}} xmm0 = xmm0[0,0,0,0,4,5,6,7]
-; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,0,0,0]
+; SSE-NEXT:    pshufd {{.*#+}} xmm0 = xmm0[0,1,0,1]
 ; SSE-NEXT:    movdqa {{.*#+}} xmm2 = [128,64,32,16,8,4,2,1]
 ; SSE-NEXT:    movdqa %xmm0, %xmm1
 ; SSE-NEXT:    pand %xmm2, %xmm1
